@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from .forms import RegisterForm, LoginForm, ProfileForm
-from .models import UserProfile
 
 # logout_view must call Django's logout() before redirecting — omitting it
 # leaves the session cookie active and the user appears logged in on the next
@@ -53,7 +52,9 @@ def logout_view(request):
 def profile_view(request):
     try:
         profile = request.user.profile
-    except UserProfile.DoesNotExist:
+    except Exception:
+        from .models import UserProfile
+
         profile = UserProfile.objects.create(user=request.user)
 
     if request.method == "POST":
