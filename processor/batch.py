@@ -12,6 +12,15 @@ def process_batch(batch_id):
     batch.status = "processing"
     batch.save()
 
+    dot_spacing = 10
+    style = "classic"
+    try:
+        profile = batch.user.profile
+        dot_spacing = profile.dot_spacing
+        style = profile.style
+    except Exception:
+        pass
+
     images = ImageUpload.objects.filter(batch=batch)
     success_count = 0
     for upload in images:
@@ -21,7 +30,7 @@ def process_batch(batch_id):
             output_path = os.path.join(settings.MEDIA_ROOT, "processed", filename)
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
-            apply_halftone(original_path, output_path)
+            apply_halftone(original_path, output_path, dot_spacing=dot_spacing, style=style)
 
             upload.processed = f"processed/{filename}"
             upload.save()

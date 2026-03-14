@@ -189,7 +189,7 @@ def batch_status_view(request, batch_id):
                 "progress": round(batch.processed_count / batch.total_images * 100)
                 if batch.total_images > 0
                 else 0,
-                "completed": batch.processed_count == batch.total_images,
+                "completed": batch.status == "completed",
             }
         )
 
