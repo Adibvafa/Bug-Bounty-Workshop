@@ -19,6 +19,7 @@ class ImageUpload(models.Model):
 
     def save(self, *args, **kwargs):
         if self.is_public and not self.share_token:
+            super().save(*args, **kwargs)
             self.share_token = self._generate_token()
         super().save(*args, **kwargs)
 

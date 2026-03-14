@@ -7,7 +7,7 @@ from django.core.exceptions import ValidationError
 def validate_preset_config(config):
     """Validate a preset configuration dictionary."""
     required_keys = {"dot_spacing", "style"}
-    if not required_keys.issubset(config.keys()):
+    if not required_keys.issubset(config.keys()) or any(config[k] is None for k in required_keys):
         raise ValidationError("Missing required configuration keys.")
     if not isinstance(config["dot_spacing"], int):
         raise ValidationError("dot_spacing must be an integer.")
